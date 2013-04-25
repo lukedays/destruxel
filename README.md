@@ -1,4 +1,4 @@
-tilemen
+Tilemen
 =======
 
-Game made with Flixel
+Game made with Flixel for a Final Project at NYU-Poly.
