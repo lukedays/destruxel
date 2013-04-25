@@ -1,5 +1,6 @@
 package {
 	import org.flixel.*;
+	import flash.display.StageDisplayState;
 	
 	public class PlayState extends FlxState {
 		[Embed(source = "assets/tileset.png")] protected var Tileset:Class;
