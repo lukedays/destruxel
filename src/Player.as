@@ -4,10 +4,10 @@ package {
 	public class Player extends FlxSprite {
 		[Embed(source = "assets/player.png")] protected var Img:Class;
 		
-		protected var _jumpVel:Number = 500;
-		protected var _runVel:Number = 250;
+		protected var _jumpVel:int = 500;
+		protected var _runVel:int = 250;
 
-		public function Player(x:Number, y:Number) {
+		public function Player(x:int, y:int) {
 			super(x, y);
 			loadGraphic(Img, true, true, 25, 25);
 			
@@ -22,16 +22,16 @@ package {
 		override public function update():void {
 			acceleration.x = 0;
 			
-			if (FlxG.keys.LEFT) {
+			if (FlxG.keys.pressed("A")) {
 				facing = LEFT;
 				acceleration.x -= drag.x;
 			}
-			else if (FlxG.keys.RIGHT) {
+			else if (FlxG.keys.pressed("D")) {
 				facing = RIGHT;
 				acceleration.x += drag.x;
 			}
 			
-			if (FlxG.keys.justPressed("X") && !velocity.y) velocity.y = -_jumpVel;
+			if (FlxG.keys.SPACE && !velocity.y) velocity.y = -_jumpVel;
 			
 			play("run");
 		}
