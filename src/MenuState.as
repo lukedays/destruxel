@@ -6,7 +6,7 @@ package {
 			FlxG.bgColor = 0xffd8d7a6;
 			FlxG.shake(0.01, 0.2);
 			
-			var text:FlxText = new FlxText(0, 50, 800, "Tilemen");
+			var text:FlxText = new FlxText(0, 50, 800, "Destruxel");
 			text.setFormat(null, 72, 0x43230a, "center", 0xff000000);
 			add(text);
 			
