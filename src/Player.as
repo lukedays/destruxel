@@ -6,6 +6,7 @@ package {
 		
 		protected var _jumpVel:int = 500;
 		protected var _runVel:int = 250;
+		protected var _isJumping:Boolean;
 
 		public function Player(x:int, y:int) {
 			super(x, y);
@@ -31,7 +32,16 @@ package {
 				acceleration.x += drag.x;
 			}
 			
-			if (FlxG.keys.SPACE && !velocity.y) velocity.y = -_jumpVel;
+			if (FlxG.keys.SPACE && !velocity.y) {
+				velocity.y = -_jumpVel;
+			}
+			
+			if (FlxG.mouse.justPressed()) {
+				var type:int;
+				if (FlxG.keys.SHIFT) type = 1;
+				else type = 0;
+				R.bullets.fire(FlxG.mouse.x, FlxG.mouse.y, type);
+			}
 			
 			play("run");
 		}

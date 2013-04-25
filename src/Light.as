@@ -14,11 +14,9 @@ package {
 		}
 
 		override public function draw():void {
-			var screenXY:FlxPoint = getScreenXY();
-
 			R.darkness.stamp(this,
-							screenXY.x - this.width / 2,
-							screenXY.y - this.height / 2);
+							x - this.width / 2,
+							y - this.height / 2);
 			
 			play("light");
 		}

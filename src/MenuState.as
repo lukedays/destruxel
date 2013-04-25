@@ -13,20 +13,6 @@ package {
 			text = new FlxText(0, 500, 800, "Press any button to start");
 			text.setFormat(null, 24, 0x000000, "center");
 			add(text);
-			
-			// Effects
-			R.emitter = new FlxEmitter(FlxG.width / 2, 50, 30);
-			R.emitter.maxParticleSpeed = new FlxPoint(500, 500);
-			
-			for (var i:int = 0; i < 30; i++) {
-				var particle:FlxParticle = new FlxParticle();
-				particle.makeGraphic(10, 10, 0xff43230a);
-				particle.exists = false;
-				R.emitter.add(particle);
-			}
-			
-			add(R.emitter);
-			R.emitter.start(true, 15, 0, 30);
 		}
 		
 		override public function update():void {

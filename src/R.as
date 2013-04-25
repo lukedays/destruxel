@@ -6,6 +6,7 @@ package {
 		public static var player:Player;
 		public static var map:FlxTilemap;
 		public static var darkness:FlxSprite;
+		public static var darkness2:FlxSprite;
 		public static var light:FlxSprite;
 		public static var bullets:BulletManager;
 		public static var emitter:FlxEmitter;

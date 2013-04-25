@@ -11,6 +11,8 @@ package {
 		override public function create():void {
 			FlxG.flash(0xff000000);
 			FlxG.mouse.show();
+			//FlxG.camera.setBounds(0, 0, 800, 600, true);
+			//FlxG.camera.follow(R.player, FlxCamera.STYLE_PLATFORMER);
 			
 			//
 			addEnvironment();
@@ -22,12 +24,6 @@ package {
 			FlxG.collide(R.player, _blocks);
 			
 			//
-			if (FlxG.mouse.justPressed()) {
-				var type:int;
-				if (FlxG.keys.SHIFT) type = 1;
-				else type = 0;
-				R.bullets.fire(FlxG.mouse.x, FlxG.mouse.y, type);
-			}
 			
 			super.update();
 		}
@@ -52,6 +48,12 @@ package {
 			R.darkness.scrollFactor.x = R.darkness.scrollFactor.y = 0;
 			R.darkness.blend = "multiply";
 			
+			// Dynamic shadows test
+			R.darkness2 = new FlxSprite(20, 20);
+			R.darkness2.makeGraphic(20, 20, 0xff222222);
+			R.darkness2.scrollFactor.x = R.darkness2.scrollFactor.y = 0;
+			R.darkness2.blend = "multiply";
+			
 			R.light = new Light(FlxG.width / 2, 0);
 			
 			R.bullets = new BulletManager();
@@ -72,18 +74,20 @@ package {
 			_blocks.add(left);
 			_blocks.add(right);
 			_blocks.add(top);
-			_blocks.add(bottom);
+			//_blocks.add(bottom);
 			_blocks.add(R.map);
 			
 			add(_blocks);
 			add(R.light);
 			add(R.darkness);
+			//add(R.darkness2);
 			add(R.bullets);
 			add(R.emitter);
 		}
 		
 		override public function draw():void {
 			R.darkness.fill(0xff222222);
+			R.darkness2.fill(0xff222222);
 			super.draw();
 		}
 		
