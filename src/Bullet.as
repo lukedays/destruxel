@@ -13,7 +13,7 @@ package {
             exists = false;
         }
  
-        public function fire(bx:int, by:int, type:int):void {
+        public function fire(bx:Number, by:Number, type:int):void {
             x = R.player.x;
             y = R.player.y;
 			_type = type;
@@ -26,17 +26,21 @@ package {
         }
         
         override public function update():void {
-			var xpos:Number = Math.round(x / R.size);
-			var ypos:Number = Math.round(y / R.size);
-			
-			changeTile(xpos, ypos);
+			if (x < 0 || x > FlxG.camera.bounds.width || y < 0 || y > FlxG.camera.bounds.height) {
+				exists = false;
+			}
+			else {
+				// Check if it collided with any tile
+				var xpos:Number = Math.round(x / R.size);
+				var ypos:Number = Math.round(y / R.size);
+				
+				updateTile(xpos, ypos);
+			}
         }
 		
-		protected function changeTile(xpos:int, ypos:int):void {
+		protected function updateTile(xpos:int, ypos:int):void {
 			if (R.map.getTile(xpos, ypos) > 0) {
-				exists = false;
-				
-				if (_type == 0) {
+				if (_type == 0) { // Destroy
 					R.map.setTile(xpos, ypos, 0);
 					
 					// Emit debris
@@ -44,9 +48,17 @@ package {
 					R.emitter.y = ypos * R.size;
 					R.emitter.start(true, 1, 0, 4);
 				}
-				else {
+				else { // Create on top
 					R.map.setTile(xpos, ypos - 1, 1);
+					
+					// Make player do a little jump
+					if (R.map.overlaps(R.player)) {
+						R.player.velocity.y = -250;
+					}
 				}
+				
+				exists = false;
+				R.shadows.updateVertices();
 			}
 		}
 	}

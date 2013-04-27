@@ -5,9 +5,13 @@ package {
 	public class R {
 		public static var player:Player;
 		public static var map:FlxTilemap;
-		public static var darkness:FlxSprite;
-		public static var darkness2:FlxSprite;
-		public static var light:FlxSprite;
+		public static var blocks:FlxGroup;
+		public static var vertices:Array;
+		
+		public static var darkness:Darkness;
+		public static var shadows:Shadows;
+		public static var light:Light;
+		
 		public static var bullets:BulletManager;
 		public static var emitter:FlxEmitter;
 		public static var size:int = 25;

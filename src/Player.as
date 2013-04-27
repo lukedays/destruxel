@@ -8,7 +8,7 @@ package {
 		protected var _runVel:int = 250;
 		protected var _isJumping:Boolean;
 
-		public function Player(x:int, y:int) {
+		public function Player(x:Number, y:Number) {
 			super(x, y);
 			loadGraphic(Img, true, true, 25, 25);
 			
@@ -32,9 +32,12 @@ package {
 				acceleration.x += drag.x;
 			}
 			
-			if (FlxG.keys.SPACE && !velocity.y) {
+			if (!_isJumping && FlxG.keys.pressed("W") && !velocity.y) {
+				_isJumping = true;
 				velocity.y = -_jumpVel;
 			}
+			
+			if (touching == FlxObject.DOWN) _isJumping = false;
 			
 			if (FlxG.mouse.justPressed()) {
 				var type:int;

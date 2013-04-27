@@ -17,7 +17,6 @@ package {
 		
 		override public function update():void {
 			if (FlxG.keys.any()) FlxG.switchState(new PlayState());
-			
 			super.update();
 		}
 	}

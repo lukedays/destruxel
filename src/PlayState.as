@@ -1,30 +1,23 @@
 package {
 	import org.flixel.*;
-	import flash.display.StageDisplayState;
+	import flash.display.*;
 	
 	public class PlayState extends FlxState {
 		[Embed(source = "assets/tileset.png")] protected var Tileset:Class;
 		[Embed(source = "assets/map.csv", mimeType = "application/octet-stream")] protected var Map:Class;
-		
-		protected var _blocks:FlxGroup;
-		
+				
 		override public function create():void {
-			FlxG.flash(0xff000000);
-			FlxG.mouse.show();
-			//FlxG.camera.setBounds(0, 0, 800, 600, true);
-			//FlxG.camera.follow(R.player, FlxCamera.STYLE_PLATFORMER);
-			
-			//
 			addEnvironment();
 			spawnPlayer();
+			
+			FlxG.flash(0xff000000);
+			FlxG.camera.setBounds(0, 0, FlxG.width, FlxG.height * 2, true);
+			FlxG.camera.follow(R.player, FlxCamera.STYLE_PLATFORMER);
+			FlxG.mouse.show();
 		}
 		
-		override public function update():void {
-			// Collision logic
-			FlxG.collide(R.player, _blocks);
-			
-			//
-			
+		override public function update():void {			
+			FlxG.collide(R.player, R.blocks);
 			super.update();
 		}
 		
@@ -39,25 +32,17 @@ package {
 			var bottom:FlxTileblock = new FlxTileblock(0, FlxG.height - 1, FlxG.width, 1);
 			
 			// Map
-			R.map = new FlxTilemap;
+			R.map = new FlxTilemap();
 			R.map.loadMap(new Map, Tileset, R.size, R.size);
 			
-			// Other features
-			R.darkness = new FlxSprite(0, 0);
-			R.darkness.makeGraphic(FlxG.width, FlxG.height, 0xff222222);
-			R.darkness.scrollFactor.x = R.darkness.scrollFactor.y = 0;
-			R.darkness.blend = "multiply";
-			
-			// Dynamic shadows test
-			R.darkness2 = new FlxSprite(20, 20);
-			R.darkness2.makeGraphic(20, 20, 0xff222222);
-			R.darkness2.scrollFactor.x = R.darkness2.scrollFactor.y = 0;
-			R.darkness2.blend = "multiply";
-			
+			// Lighting
 			R.light = new Light(FlxG.width / 2, 0);
+			R.darkness = new Darkness();
+			R.shadows = new Shadows();
+			R.shadows.updateVertices();
 			
+			// Particles
 			R.bullets = new BulletManager();
-			
 			R.emitter = new FlxEmitter(0, 0, 20);
 			R.emitter.bounce = 0.5;
 			R.emitter.gravity = 800;
@@ -70,25 +55,19 @@ package {
 			}
 			
 			// Add to collision group
-			_blocks = new FlxGroup();
-			_blocks.add(left);
-			_blocks.add(right);
-			_blocks.add(top);
-			//_blocks.add(bottom);
-			_blocks.add(R.map);
+			R.blocks = new FlxGroup();
+			R.blocks.add(left);
+			R.blocks.add(right);
+			R.blocks.add(top);
+			//R.blocks.add(bottom);
+			R.blocks.add(R.map);
 			
-			add(_blocks);
+			add(R.shadows);
+			add(R.blocks);
 			add(R.light);
 			add(R.darkness);
-			//add(R.darkness2);
 			add(R.bullets);
 			add(R.emitter);
-		}
-		
-		override public function draw():void {
-			R.darkness.fill(0xff222222);
-			R.darkness2.fill(0xff222222);
-			super.draw();
 		}
 		
 		protected function spawnPlayer():void {
