@@ -2,20 +2,20 @@ package {
 	import org.flixel.*;
 	
 	public class Bullet extends FlxSprite {
-		[Embed(source = "assets/light.png")] protected var Img:Class;
+		[Embed(source = "assets/bullet.png")] protected var Img:Class;
 		
-        protected var _speed:int = 700;
+        protected var _speed:int = 900;
 		protected var _type:int;
         
         public function Bullet() {
             super(0, 0);
-			loadGraphic(Img, true, true, R.size, R.size);
+			loadGraphic(Img, true, true, 10, 10);
             exists = false;
         }
  
         public function fire(bx:Number, by:Number, type:int):void {
-            x = R.player.x;
-            y = R.player.y;
+            x = R.player.x + R.player.width / 2;
+            y = R.player.y + R.player.height / 2;
 			_type = type;
 			
 			var mag:Number = Math.sqrt(Math.pow((bx - x), 2) + Math.pow((by - y), 2));
@@ -48,8 +48,28 @@ package {
 					R.emitter.y = ypos * R.size;
 					R.emitter.start(true, 1, 0, 4);
 				}
-				else { // Create on top
-					R.map.setTile(xpos, ypos - 1, 1);
+				else { // Create
+					var xoff:int;
+					var yoff:int;
+					trace(velocity.x + " " + velocity.y);
+					if (velocity.x > 0 && Math.abs(velocity.x) >= 2 * Math.abs(velocity.y)) {
+						xoff = -1;
+						yoff = 0;
+					}
+					if (velocity.x < 0 && Math.abs(velocity.x) >= 2 * Math.abs(velocity.y)) {
+						xoff = 1;
+						yoff = 0;
+					}
+					if (velocity.y > 0 && Math.abs(velocity.y) >= 2 * Math.abs(velocity.x)) {
+						xoff = 0;
+						yoff = -1;
+					}
+					if (velocity.y < 0 && Math.abs(velocity.y) >= 2 * Math.abs(velocity.x)) {
+						xoff = 0;
+						yoff = 1;
+					}
+					
+					R.map.setTile(xpos + xoff, ypos + yoff, 1);
 					
 					// Make player do a little jump
 					if (R.map.overlaps(R.player)) {

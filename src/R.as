@@ -14,6 +14,6 @@ package {
 		
 		public static var bullets:BulletManager;
 		public static var emitter:FlxEmitter;
-		public static var size:int = 25;
+		public static var size:int = 40;
 	}
 }

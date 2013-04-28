@@ -4,18 +4,18 @@ package {
 	public class Player extends FlxSprite {
 		[Embed(source = "assets/player.png")] protected var Img:Class;
 		
-		protected var _jumpVel:int = 500;
-		protected var _runVel:int = 250;
+		protected var _jumpVel:int = 650;
+		protected var _runVel:int = 350;
 		protected var _isJumping:Boolean;
 
 		public function Player(x:Number, y:Number) {
 			super(x, y);
-			loadGraphic(Img, true, true, 25, 25);
+			loadGraphic(Img, true, true, 40, 40);
 			
 			maxVelocity.x = _runVel;
 			maxVelocity.y = _jumpVel;
 			drag.x = _runVel * 10;
-			acceleration.y = 800;
+			acceleration.y = 1000;
 			
 			addAnimation("run", [0]);
 		}

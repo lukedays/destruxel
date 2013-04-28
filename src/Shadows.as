@@ -5,7 +5,7 @@ package {
 	public class Shadows extends FlxSprite {				
 		public function Shadows():void {
 			super(0, 0);
-			makeGraphic(FlxG.width, FlxG.height, 0x00000000);
+			makeGraphic(FlxG.width, FlxG.height * 2, 0x00000000);
 			scrollFactor.x = scrollFactor.y = 1;
 			blend = "normal";
 			dirty = true;
@@ -14,16 +14,27 @@ package {
 		override public function draw():void {
 			fill(0x00000000);
 			
+			// Render shadows on blocks
 			for (var i:int; i < R.vertices.length; ++i) {
-				renderShadows(new FlxPoint(R.player.x, R.player.y), R.vertices[i]);
+				//renderShadows(new FlxPoint(R.light.x, R.light.y), R.vertices[i]);
+			}
+			
+			// Render shadows on player
+			if (R.player) {
+				var v:Array = new Array(new FlxPoint(R.player.x + R.player.width, R.player.y),
+					new FlxPoint(R.player.x + R.player.width, R.player.y + R.player.height),
+					new FlxPoint(R.player.x, R.player.y + R.player.height),
+					new FlxPoint(R.player.x, R.player.y));
+					
+				renderShadows(new FlxPoint(R.light.x, R.light.y), v);
 			}
 			
 			super.draw();
 		}
 		
 		public function renderShadows(source:FlxPoint, v:Array):void {
-			var gfx:Graphics = FlxG.flashGfx;
 			var found:int = -1;
+			var gfx:Graphics = FlxG.flashGfx;
     		gfx.clear();
 			// Shadow fill
 			gfx.lineStyle(1, 0xbbbb88, 1);
@@ -31,27 +42,27 @@ package {
 			
 			for (var i:int = 0; i < v.length; ++i) {
 				if (i == 0) found = -1;
-				
+
 				var iprev:int = (i - 1 >= 0) ? (i - 1) : (i - 1 + v.length);
 				var inext:int = (i + 1 < v.length) ? (i + 1) : (i + 1 - v.length);
 				
 				// Arrays linking the source to the current, previous and next vertices
-				var current:FlxPoint = new FlxPoint(v[i].x + 20 * (v[i].x - source.x), v[i].y + 20 * (v[i].y - source.y));
-				var prev:FlxPoint = new FlxPoint(v[iprev].x + 20 * (v[iprev].x - source.x), v[iprev].y + 20 * (v[iprev].y - source.y));
-				var next:FlxPoint = new FlxPoint(v[inext].x + 20 * (v[inext].x - source.x), v[inext].y + 20 * (v[inext].y - source.y));
+				var current:FlxPoint = parallel(v[i], source);
+				var prev:FlxPoint = parallel(v[iprev], source);
+				var next:FlxPoint = parallel(v[inext], source);
 				
 				// Cross product to know if shadows should be cast on current vertex
 				if (found == -1) {
-					// First casting point
-					if ((current.x * next.y - current.y * next.x) * (current.x * prev.y - current.y * prev.x) >= 0) {
+					// Found first casting point
+					if (cross(current, next) * cross(current, prev) >= 0) {
 						found = i;
 						gfx.moveTo(v[i].x, v[i].y);
 						gfx.lineTo(current.x, current.y);
 					}
 				}
 				else {
-					// Second casting point
-					if ((current.x * next.y - current.y * next.x) * (current.x * prev.y - current.y * prev.x) >= 0) {
+					// Found second casting point
+					if (cross(current, next) * cross(current, prev) >= 0) {
 						gfx.lineTo(current.x, current.y);
 						gfx.lineTo(v[i].x, v[i].y);
 						gfx.lineTo(v[found].x, v[found].y);
@@ -66,6 +77,7 @@ package {
 		public function updateVertices():void {
 			R.vertices = new Array();
 			
+			// Add player			
 			for (var j:int = 0; j < FlxG.height / R.size; ++j) {
 				for (var i:int = 0; i < FlxG.width / R.size; ++i) {
 					var count:int = 0;
@@ -87,6 +99,14 @@ package {
 					}
 				}
 			}
+		}
+		
+		public function cross(a:FlxPoint, b:FlxPoint):Number {
+			return (a.x * b.y - a.y * b.x);
+		}
+		
+		public function parallel(a:FlxPoint, b:FlxPoint):FlxPoint {
+			return new FlxPoint(a.x + 100 * (a.x - b.x), a.y + 100 * (a.y - b.y));
 		}
 	}
 }

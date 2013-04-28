@@ -5,6 +5,8 @@ package {
 	public class PlayState extends FlxState {
 		[Embed(source = "assets/tileset.png")] protected var Tileset:Class;
 		[Embed(source = "assets/map.csv", mimeType = "application/octet-stream")] protected var Map:Class;
+		
+		public var socket:CustomSocket;
 				
 		override public function create():void {
 			addEnvironment();
@@ -14,9 +16,15 @@ package {
 			FlxG.camera.setBounds(0, 0, FlxG.width, FlxG.height * 2, true);
 			FlxG.camera.follow(R.player, FlxCamera.STYLE_PLATFORMER);
 			FlxG.mouse.show();
+			
+			socket = new CustomSocket();
 		}
 		
-		override public function update():void {			
+		override public function update():void {
+			if (FlxG.mouse.justPressed()) {
+				socket.send(R.player.x + " " + R.player.y);
+			}
+			
 			FlxG.collide(R.player, R.blocks);
 			super.update();
 		}
