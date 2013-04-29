@@ -2,6 +2,7 @@ package {
 	import org.flixel.*;
 	import flash.display.*;
 	import flash.utils.*;
+	import flash.system.Security;
 	
 	public class MenuState extends FlxState {
 		override public function create():void {
@@ -26,7 +27,11 @@ package {
 			R.textPlayerNumber2.color = 0xFF0000;
 			add(R.textPlayerNumber2);
 			
-			R.socket = new CustomSocket("localhost", 1135);
+			var host:String = "192.168.2.100";
+			Security.allowDomain(host);
+			Security.allowInsecureDomain(host);
+			Security.loadPolicyFile("http://" + host + "/crossdomain.xml");
+			R.socket = new CustomSocket(host, 1135);
 		}
 		
 		override public function update():void {

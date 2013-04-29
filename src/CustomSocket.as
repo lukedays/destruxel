@@ -4,11 +4,17 @@ package {
     import flash.net.*;
 	import flash.errors.*;
 	import com.adobe.serialization.json.JSON;
+	import flash.system.Security;
 
 	public class CustomSocket extends Socket {
 		public var response:String;
 
 		public function CustomSocket(host:String = null, port:uint = 0) {
+			var host:String = "192.168.2.100";
+			Security.allowDomain(host);
+			Security.allowInsecureDomain(host);
+			Security.loadPolicyFile("http://" + host + "/crossdomain.xml");
+			
 			super();
 			configureListeners();
 			if (host && port)  {
