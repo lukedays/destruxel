@@ -5,7 +5,7 @@ package {
 	public class Shadows extends FlxSprite {				
 		public function Shadows():void {
 			super(0, 0);
-			makeGraphic(FlxG.width, FlxG.height * 2, 0x00000000);
+			makeGraphic(R.map.width, R.map.height, 0x00000000);
 			scrollFactor.x = scrollFactor.y = 1;
 			blend = "normal";
 			dirty = true;
@@ -19,12 +19,21 @@ package {
 				renderShadows(new FlxPoint(R.light.x, R.light.y), R.vertices[i]);
 			}
 			
-			// Render shadows on player
+			// Render shadows on players
+			var v:Array;
 			if (R.player1) {
-				var v:Array = new Array(new FlxPoint(R.player1.x + R.player1.width, R.player1.y),
+				v = new Array(new FlxPoint(R.player1.x + R.player1.width, R.player1.y),
 					new FlxPoint(R.player1.x + R.player1.width, R.player1.y + R.player1.height),
 					new FlxPoint(R.player1.x, R.player1.y + R.player1.height),
 					new FlxPoint(R.player1.x, R.player1.y));
+					
+				renderShadows(new FlxPoint(R.light.x, R.light.y), v);
+			}
+			if (R.player2) {
+				v = new Array(new FlxPoint(R.player2.x + R.player2.width, R.player2.y),
+					new FlxPoint(R.player2.x + R.player2.width, R.player2.y + R.player2.height),
+					new FlxPoint(R.player2.x, R.player2.y + R.player2.height),
+					new FlxPoint(R.player2.x, R.player2.y));
 					
 				renderShadows(new FlxPoint(R.light.x, R.light.y), v);
 			}
@@ -78,18 +87,18 @@ package {
 			R.vertices = new Array();
 			
 			// Add player			
-			for (var j:int = 0; j < FlxG.height / R.size; ++j) {
-				for (var i:int = 0; i < FlxG.width / R.size; ++i) {
+			for (var j:int = 0; j < R.map.heightInTiles; ++j) {
+				for (var i:int = 0; i < R.map.widthInTiles; ++i) {
 					var count:int = 0;
 					
 					// Count solid neighbors
-					if (R.map.getTileByIndex(j * FlxG.width / R.size + i + 1)) count++;
-					if (R.map.getTileByIndex(j * FlxG.width / R.size + i - 1)) count++;
-					if (R.map.getTileByIndex((j + 1) * FlxG.width / R.size + i)) count++;
-					if (R.map.getTileByIndex((j - 1) * FlxG.width / R.size + i)) count++;
+					if (R.map.getTileByIndex(j * R.map.widthInTiles + i + 1)) count++;
+					if (R.map.getTileByIndex(j * R.map.widthInTiles + i - 1)) count++;
+					if (R.map.getTileByIndex((j + 1) * R.map.widthInTiles + i)) count++;
+					if (R.map.getTileByIndex((j - 1) * R.map.widthInTiles + i)) count++;
 					
 					// Add vertex to shadow casting
-					if (R.map.getTileByIndex(j * FlxG.width / R.size + i) == 1 && count < 3) {
+					if (R.map.getTileByIndex(j * R.map.widthInTiles + i) == 1 && count < 3) {
 						var v:Array = new Array(new FlxPoint(i * R.size + R.size, j * R.size),
 									new FlxPoint(i * R.size + R.size, j * R.size + R.size),
 									new FlxPoint(i * R.size, j * R.size + R.size),

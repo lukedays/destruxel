@@ -1,5 +1,6 @@
 package {
 	import org.flixel.*;
+	import com.adobe.serialization.json.JSON;
 	
 	public class Bullet extends FlxSprite {
 		[Embed(source = "assets/bullet.png")] protected var Img:Class;
@@ -26,7 +27,7 @@ package {
         }
         
         override public function update():void {
-			if (x < 0 || x > FlxG.camera.bounds.width || y < 0 || y > FlxG.camera.bounds.height) {
+			if (x < 0 || x > R.map.width || y < 0 || y > R.map.height) {
 				exists = false;
 			}
 			else {
@@ -42,6 +43,7 @@ package {
 			if (R.map.getTile(xpos, ypos) > 0) {
 				if (_type == 0) { // Destroy
 					R.map.setTile(xpos, ypos, 0);
+					sendData(xpos, ypos, 0);
 					
 					// Emit debris
 					R.emitter.x = xpos * R.size;
@@ -51,7 +53,6 @@ package {
 				else { // Create
 					var xoff:int;
 					var yoff:int;
-					trace(velocity.x + " " + velocity.y);
 					if (velocity.x > 0 && Math.abs(velocity.x) >= 2 * Math.abs(velocity.y)) {
 						xoff = -1;
 						yoff = 0;
@@ -70,6 +71,7 @@ package {
 					}
 					
 					R.map.setTile(xpos + xoff, ypos + yoff, 1);
+					sendData(xpos + xoff, ypos + yoff, 1);
 					
 					// Make player do a little jump
 					if (R.map.overlaps(R.player1)) {
@@ -80,6 +82,16 @@ package {
 				exists = false;
 				R.shadows.updateVertices();
 			}
+		}
+		
+		public function sendData(x:int, y:int, tile:int):void {
+			var mess:Object = new Object();
+			mess.block = true;
+			mess.x = x;
+			mess.y = y;
+			mess.tile = tile;
+			R.socket2.write(JSON.encode(mess));
+			R.socket2.flush();
 		}
 	}
 }

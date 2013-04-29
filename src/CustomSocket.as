@@ -8,7 +8,7 @@ package {
 	public class CustomSocket extends Socket {
 		public var response:String;
 
-		public function CustomSocket(host:String = null, port:uint = 0) {
+		public function CustomSocket(host:String, port:uint) {
 			super();
 			configureListeners();
 			if (host && port)  {
@@ -35,31 +35,36 @@ package {
 		
 		private function readResponse():void {
 			response = readUTFBytes(bytesAvailable);
-			trace(response);
 			
-			var obj:Object = JSON.decode(response);
-			if (obj.login) {
-				if (!R.playerNumber) R.playerNumber = obj.player;
+			// Responses sometimes come in batch
+			var split:Array = response.split("}");
+			for (var i:int = 0; i < split.length - 1; ++i) {
 				
-				if (obj.player >= 1) {
-					R.textPlayerNumber1.text = "Player 1 Online";
-					R.textPlayerNumber1.color = 0x00AA00;
+				var obj:Object = JSON.decode(split[i] + "}");
+				if (obj.login) {
+					if (!R.playerNumber) R.playerNumber = obj.player;
+						
+					if (obj.player >= 1) {
+						R.textPlayer1Number.text = "Player 1 Online";
+						R.textPlayer1Number.color = 0x00AA00;
+					}
+					
+					if (obj.player >= 2) {
+						R.textPlayer2Number.text = "Player 2 Online";
+						R.textPlayer2Number.color = 0x00AA00;
+					}
 				}
-				
-				if (obj.player >= 2) {
-					R.textPlayerNumber2.text = "Player 2 Online";
-					R.textPlayerNumber2.color = 0x00AA00;
+				else if (obj.block) {
+					if (obj.x && obj.y) {
+						R.map.setTile(parseInt(obj.x), parseInt(obj.y), parseInt(obj.tile));
+						R.shadows.updateVertices();
+					}
 				}
-			}
-			else if (obj.x && obj.y) {
-				if (R.playerNumber == 1 && obj.player == 2) {
-					R.player2.x = parseFloat(obj.x);
-					R.player2.y = parseFloat(obj.y);
-				}
-				
-				if (R.playerNumber == 2 && obj.player == 1) {
-					R.player2.x = parseFloat(obj.x);
-					R.player2.y = parseFloat(obj.y);
+				else if (obj.x && obj.y) {
+					if (R.player2) {
+						R.player2.x = parseFloat(obj.x);
+						R.player2.y = parseFloat(obj.y);
+					}
 				}
 			}
 		}
@@ -82,7 +87,7 @@ package {
 		}
 
 		private function socketDataHandler(event:ProgressEvent):void {
-			trace("socketDataHandler: " + event);
+			//trace("socketDataHandler: " + event);
 			readResponse();
 		}
 	}

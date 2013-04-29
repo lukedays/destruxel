@@ -11,9 +11,10 @@ package {
 		override public function create():void {
 			addEnvironment();
 			spawnPlayer();
+			addBasicUI();
 			
 			FlxG.flash(0xff000000);
-			FlxG.camera.setBounds(0, 0, FlxG.width, FlxG.height * 2, true);
+			FlxG.camera.setBounds(0, 0, R.map.width, R.map.height, true);
 			FlxG.camera.follow(R.player1, FlxCamera.STYLE_PLATFORMER);
 			FlxG.mouse.show();
 		}
@@ -24,19 +25,31 @@ package {
 			super.update();
 		}
 		
+		public function addBasicUI():void {
+			R.textPlayer1Score = new FlxText(0, 2, FlxG.width, "Player 1 score: " + R.player1Score);
+			R.textPlayer1Score.setFormat(null, 16, 0x0000AA, "left");
+			R.textPlayer1Score.scrollFactor.x = R.textPlayer1Score.scrollFactor.y = 0;
+			add(R.textPlayer1Score);
+			
+			R.textPlayer2Score = new FlxText(0, 20, FlxG.width, "Player 2 score: " + R.player2Score);
+			R.textPlayer2Score.setFormat(null, 16, 0xAA0000, "left");
+			R.textPlayer2Score.scrollFactor.x = R.textPlayer2Score.scrollFactor.y = 0;
+			add(R.textPlayer2Score);
+		}
+		
 		protected function addEnvironment():void {
 			// Background
 			add(new Background(0, 0, 0));
 			
-			// Boundaries
-			var left:FlxTileblock = new FlxTileblock(0, 0, 1, FlxG.height);
-			var right:FlxTileblock = new FlxTileblock(FlxG.width - 1, 0, 1, FlxG.height);
-			var top:FlxTileblock = new FlxTileblock(0, 0, FlxG.width, 1);
-			var bottom:FlxTileblock = new FlxTileblock(0, FlxG.height - 1, FlxG.width, 1);
-			
 			// Map
 			R.map = new FlxTilemap();
 			R.map.loadMap(new Map, Tileset, R.size, R.size);
+			
+			// Boundaries
+			var left:FlxTileblock = new FlxTileblock(0, 0, 1, R.map.height);
+			var right:FlxTileblock = new FlxTileblock(R.map.width - 1, 0, 1, R.map.height);
+			var top:FlxTileblock = new FlxTileblock(0, 0, R.map.width, 1);
+			var bottom:FlxTileblock = new FlxTileblock(0, R.map.height - 1, R.map.width, 1);
 			
 			// Lighting
 			R.light = new Light(FlxG.width / 2, 0);
@@ -77,7 +90,7 @@ package {
 			R.player1 = new Player(FlxG.width / 2, FlxG.height / 3);
 			add(R.player1);
 			
-			R.player2 = new Player(FlxG.width / 3, FlxG.height / 3);
+			R.player2 = new Player(FlxG.width / 2, FlxG.height / 3);
 			R.player2.inactive = true;
 			add(R.player2);
 		}
