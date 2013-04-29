@@ -9,7 +9,7 @@
     <movie width="800" />
     <movie height="600" />
     <movie version="10" />
-    <movie minorVersion="1" />
+    <movie minorVersion="3" />
     <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
   </output>
@@ -21,7 +21,6 @@
   <!-- Build options -->
   <build>
     <option accessible="False" />
-    <option advancedTelemetry="False" />
     <option allowSourcePathOverlap="False" />
     <option benchmark="False" />
     <option es="False" />
@@ -85,7 +84,7 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
-    <option testMovie="Default" />
+    <option testMovie="Unknown" />
   </options>
   <!-- Plugin storage -->
   <storage />

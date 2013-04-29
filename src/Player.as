@@ -18,14 +18,16 @@ package {
 			maxVelocity.x = _runVel;
 			maxVelocity.y = _jumpVel;
 			drag.x = _runVel * 10;
-			acceleration.y = 1000;
 			
 			addAnimation("run", [0]);
 		}
 		
 		override public function update():void {
+			acceleration.y = 0;
+			
 			if (!inactive) {
 				acceleration.x = 0;
+				acceleration.y = 1000;
 				
 				if (FlxG.keys.pressed("A")) {
 					facing = LEFT;
@@ -41,6 +43,7 @@ package {
 				if (!_isJumping && FlxG.keys.pressed("W") && !velocity.y) {
 					_isJumping = true;
 					velocity.y = -_jumpVel;
+					sendData();
 				}
 				
 				if (touching == FlxObject.DOWN) _isJumping = false;
@@ -55,6 +58,14 @@ package {
 				play("run");
 			}
 			
+			if (R.playerNumber == 1) {
+				R.player2.color = 0xFF0000;
+			}
+			
+			if (R.playerNumber == 2) {
+				R.player1.color = 0xFF0000;
+			}
+			
 			if (_networkTimer < 1) _networkTimer += FlxG.elapsed;
 		}
 		
@@ -62,6 +73,7 @@ package {
 			if (_networkTimer >= 1) {
 				_networkTimer = 0;
 				var mess:Object = new Object();
+				mess.player = R.playerNumber;
 				mess.x = R.player1.x;
 				mess.y = R.player1.y;
 				R.socket.write(JSON.encode(mess));

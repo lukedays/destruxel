@@ -4,17 +4,11 @@ package {
     import flash.net.*;
 	import flash.errors.*;
 	import com.adobe.serialization.json.JSON;
-	import flash.system.Security;
 
 	public class CustomSocket extends Socket {
 		public var response:String;
 
 		public function CustomSocket(host:String = null, port:uint = 0) {
-			var host:String = "192.168.2.100";
-			Security.allowDomain(host);
-			Security.allowInsecureDomain(host);
-			Security.loadPolicyFile("http://" + host + "/crossdomain.xml");
-			
 			super();
 			configureListeners();
 			if (host && port)  {
@@ -57,16 +51,16 @@ package {
 					R.textPlayerNumber2.color = 0x00AA00;
 				}
 			}
-			else {
+			else if (obj.x && obj.y) {
 				if (R.playerNumber == 1 && obj.player == 2) {
 					R.player2.x = parseFloat(obj.x);
 					R.player2.y = parseFloat(obj.y);
 				}
 				
-				/*if (R.playerNumber == 2 && obj.player == 1) {
+				if (R.playerNumber == 2 && obj.player == 1) {
 					R.player2.x = parseFloat(obj.x);
 					R.player2.y = parseFloat(obj.y);
-				}*/
+				}
 			}
 		}
 
@@ -92,50 +86,4 @@ package {
 			readResponse();
 		}
 	}
-
-	/*public function CustomSocket() {
-		socket = new XMLSocket();
-		configureListeners(socket);
-		if (hostName && port) {
-			socket.connect(hostName, port);
-		}
-	}
-
-	public function send(data:Object):void {
-		socket.send(data);
-	}
-
-	private function configureListeners(dispatcher:IEventDispatcher):void {
-		dispatcher.addEventListener(Event.CLOSE, closeHandler);
-		dispatcher.addEventListener(Event.CONNECT, connectHandler);
-		dispatcher.addEventListener(DataEvent.DATA, dataHandler);
-		dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-		dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-		dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
-	}
-
-	private function closeHandler(event:Event):void {
-		trace("closeHandler: " + event);
-	}
-
-	private function connectHandler(event:Event):void {
-		trace("connectHandler: " + event);
-	}
-
-	private function dataHandler(event:DataEvent):void {
-		trace("dataHandler: " + event);
-		trace(event.data);
-	}
-
-	private function ioErrorHandler(event:IOErrorEvent):void {
-		trace("ioErrorHandler: " + event);
-	}
-
-	private function progressHandler(event:ProgressEvent):void {
-		trace("progressHandler loaded:" + event.bytesLoaded + " total: " + event.bytesTotal);
-	}
-
-	private function securityErrorHandler(event:SecurityErrorEvent):void {
-		trace("securityErrorHandler: " + event);
-	}*/
 }
