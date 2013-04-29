@@ -1,31 +1,26 @@
 package {
 	import org.flixel.*;
 	import flash.display.*;
+	import flash.utils.*;
+	import com.adobe.serialization.json.JSON;
 	
 	public class PlayState extends FlxState {
-		[Embed(source = "assets/tileset.png")] protected var Tileset:Class;
+		[Embed(source = "assets/tileset2.png")] protected var Tileset:Class;
 		[Embed(source = "assets/map.csv", mimeType = "application/octet-stream")] protected var Map:Class;
 		
-		public var socket:CustomSocket;
-				
 		override public function create():void {
 			addEnvironment();
 			spawnPlayer();
 			
 			FlxG.flash(0xff000000);
 			FlxG.camera.setBounds(0, 0, FlxG.width, FlxG.height * 2, true);
-			FlxG.camera.follow(R.player, FlxCamera.STYLE_PLATFORMER);
+			FlxG.camera.follow(R.player1, FlxCamera.STYLE_PLATFORMER);
 			FlxG.mouse.show();
-			
-			socket = new CustomSocket();
 		}
 		
 		override public function update():void {
-			if (FlxG.mouse.justPressed()) {
-				socket.send(R.player.x + " " + R.player.y);
-			}
-			
-			FlxG.collide(R.player, R.blocks);
+			FlxG.collide(R.player1, R.blocks);
+			FlxG.collide(R.player2, R.blocks);
 			super.update();
 		}
 		
@@ -79,8 +74,12 @@ package {
 		}
 		
 		protected function spawnPlayer():void {
-			R.player = new Player(FlxG.width / 2, FlxG.height / 3);
-			add(R.player);
+			R.player1 = new Player(FlxG.width / 2, FlxG.height / 3);
+			add(R.player1);
+			
+			R.player2 = new Player(FlxG.width / 3, FlxG.height / 3);
+			R.player2.inactive = true;
+			add(R.player2);
 		}
 	}
 }

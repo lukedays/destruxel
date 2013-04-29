@@ -16,15 +16,15 @@ package {
 			
 			// Render shadows on blocks
 			for (var i:int; i < R.vertices.length; ++i) {
-				//renderShadows(new FlxPoint(R.light.x, R.light.y), R.vertices[i]);
+				renderShadows(new FlxPoint(R.light.x, R.light.y), R.vertices[i]);
 			}
 			
 			// Render shadows on player
-			if (R.player) {
-				var v:Array = new Array(new FlxPoint(R.player.x + R.player.width, R.player.y),
-					new FlxPoint(R.player.x + R.player.width, R.player.y + R.player.height),
-					new FlxPoint(R.player.x, R.player.y + R.player.height),
-					new FlxPoint(R.player.x, R.player.y));
+			if (R.player1) {
+				var v:Array = new Array(new FlxPoint(R.player1.x + R.player1.width, R.player1.y),
+					new FlxPoint(R.player1.x + R.player1.width, R.player1.y + R.player1.height),
+					new FlxPoint(R.player1.x, R.player1.y + R.player1.height),
+					new FlxPoint(R.player1.x, R.player1.y));
 					
 				renderShadows(new FlxPoint(R.light.x, R.light.y), v);
 			}

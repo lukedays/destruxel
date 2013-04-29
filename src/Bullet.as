@@ -14,8 +14,8 @@ package {
         }
  
         public function fire(bx:Number, by:Number, type:int):void {
-            x = R.player.x + R.player.width / 2;
-            y = R.player.y + R.player.height / 2;
+            x = R.player1.x + R.player1.width / 2;
+            y = R.player1.y + R.player1.height / 2;
 			_type = type;
 			
 			var mag:Number = Math.sqrt(Math.pow((bx - x), 2) + Math.pow((by - y), 2));
@@ -72,8 +72,8 @@ package {
 					R.map.setTile(xpos + xoff, ypos + yoff, 1);
 					
 					// Make player do a little jump
-					if (R.map.overlaps(R.player)) {
-						R.player.velocity.y = -250;
+					if (R.map.overlaps(R.player1)) {
+						R.player1.velocity.y = -250;
 					}
 				}
 				

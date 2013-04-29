@@ -4,8 +4,8 @@ package {
 	public class Darkness extends FlxSprite {				
 		public function Darkness():void {
 			super(0, 0);
-			makeGraphic(FlxG.width, FlxG.height, 0xff222222);
-			scrollFactor.x = scrollFactor.y = 0;
+			makeGraphic(FlxG.width, FlxG.height * 2, 0xff222222);
+			scrollFactor.x = scrollFactor.y = 1;
 			blend = "multiply";
 		}
 
