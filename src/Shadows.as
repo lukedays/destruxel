@@ -7,7 +7,7 @@ package {
 			super(0, 0);
 			makeGraphic(R.map.width, R.map.height, 0x00000000);
 			scrollFactor.x = scrollFactor.y = 1;
-			blend = "screen";
+			blend = "overlay";
 			dirty = true;
 		}
 
@@ -46,8 +46,8 @@ package {
 			var gfx:Graphics = FlxG.flashGfx;
     		gfx.clear();
 			// Shadow fill
-			gfx.lineStyle(1, 0x444444, 1);
-			gfx.beginFill(0x444444, 1);
+			gfx.lineStyle(1, 0x555555, 1);
+			gfx.beginFill(0x555555, 1);
 			
 			for (var i:int = 0; i < v.length; ++i) {
 				if (i == 0) found = -1;

@@ -19,11 +19,11 @@ package {
         public function fire(bx:Number, by:Number, type:int, origin:int):void {
 			if (origin == 1) {
 				x = R.player1.x + R.player1.width / 2;
-				y = R.player1.y + R.player1.height / 2;
+				y = R.player1.y + 5;
 			}
 			else {
 				x = R.player2.x + R.player2.width / 2;
-				y = R.player2.y + R.player2.height / 2;
+				y = R.player2.y + 5;
 			}
 			_type = type;
 			

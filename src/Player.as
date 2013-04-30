@@ -3,7 +3,7 @@ package {
 	import com.adobe.serialization.json.JSON;
 	
 	public class Player extends FlxSprite {
-		[Embed(source = "assets/player.png")] protected var Img:Class;
+		[Embed(source = "assets/player2.png")] protected var Img:Class;
 		[Embed(source = "assets/p1_jump.mp3")] private var P1Jump:Class;
 		[Embed(source = "assets/p2_jump.mp3")] private var P2Jump:Class;
 		[Embed(source = "assets/p1_shoot.mp3")] private var P1Shoot:Class;
@@ -17,7 +17,7 @@ package {
 		protected var _isJumping:Boolean;
 		protected var _fireTimer:Number = 0;
 		protected var _isFiring:Boolean;
-		protected var _firingPeriod:Number = 0.2;
+		protected var _firingPeriod:Number = 0.3;
 
 		public function Player(x:Number, y:Number) {
 			_startx = x;
@@ -34,12 +34,15 @@ package {
 		
 		override public function update():void {
 			// Inactive players will be controlled via network
+			width = 28;
+			offset.x = 6;
+			
 			acceleration.y = 0;
 			if (!inactive) {
 				sendPosition();
 				
 				acceleration.x = 0;
-				acceleration.y = 1000;
+				acceleration.y = 700;
 				
 				if (FlxG.keys.pressed("A")) {
 					facing = LEFT;

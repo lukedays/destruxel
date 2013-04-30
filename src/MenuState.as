@@ -3,8 +3,8 @@ package {
 	
 	public class MenuState extends FlxState {
 		[Embed(source = "assets/song2.mp3")] private var Song2:Class;
-		protected var _host:String = "10.5.43.167";
-		protected var _port:int = 1150;
+		protected var _host:String = "128.238.56.208";
+		protected var _port:int = 1165;
 		
 		override public function create():void {
 			FlxG.bgColor = 0xffd8d7a6;
@@ -24,7 +24,7 @@ package {
 			text.setFormat(null, 80, 0xAA0000, "center", 0xff000000);
 			add(text);
 			
-			text = new FlxText(0, 250, FlxG.width, "Objective: drop the opponent!\nW, A, D -> move and jump\nMouse -> aim and hold to destroy\nSHIFT -> hold to build");
+			text = new FlxText(0, 250, FlxG.width, "Objective -> drop the opponent!\nW, A, D -> move and jump\nMouse -> aim and hold to destroy\nSHIFT -> hold to build");
 			text.setFormat(null, 35, 0x000000, "center", 0xff000000);
 			add(text);
 		}

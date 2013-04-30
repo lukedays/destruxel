@@ -39,12 +39,12 @@ package {
 		}
 		
 		protected function addEnvironment():void {
-			// Background
-			add(new Background(0, 0, 0));
-			
 			// Map
 			R.map = new FlxTilemap();
 			R.map.loadMap(new Map, Tileset, R.size, R.size);
+			
+			// Background
+			add(new Background(0, 0, 0));
 			
 			// Boundaries
 			var left:FlxTileblock = new FlxTileblock(0, 0, 1, R.map.height);
