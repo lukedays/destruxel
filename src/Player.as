@@ -4,6 +4,10 @@ package {
 	
 	public class Player extends FlxSprite {
 		[Embed(source = "assets/player.png")] protected var Img:Class;
+		[Embed(source = "assets/p1_jump.mp3")] private var P1Jump:Class;
+		[Embed(source = "assets/p2_jump.mp3")] private var P2Jump:Class;
+		[Embed(source = "assets/p1_shoot.mp3")] private var P1Shoot:Class;
+		[Embed(source = "assets/p2_shoot.mp3")] private var P2Shoot:Class;
 		
 		public var inactive:Boolean = false;
 		protected var _startx:Number;
@@ -11,6 +15,9 @@ package {
 		protected var _jumpVel:int = 650;
 		protected var _runVel:int = 350;
 		protected var _isJumping:Boolean;
+		protected var _fireTimer:Number = 0;
+		protected var _isFiring:Boolean;
+		protected var _firingPeriod:Number = 0.2;
 
 		public function Player(x:Number, y:Number) {
 			_startx = x;
@@ -26,25 +33,11 @@ package {
 		}
 		
 		override public function update():void {
-			acceleration.y = 0;
-			
-			if (y > R.map.height) {
-				flicker();
-				x = _startx;
-				y = _starty;
-				
-				if (R.playerNumber == 1) {
-					R.player2Score++;
-					R.textPlayer2Score.text = "Player 2 score: " + R.player2Score;
-				}
-				else {
-					R.player1Score++;
-					R.textPlayer1Score.text = "Player 1 score: " + R.player1Score;
-				}
-			}
-			
 			// Inactive players will be controlled via network
+			acceleration.y = 0;
 			if (!inactive) {
+				sendPosition();
+				
 				acceleration.x = 0;
 				acceleration.y = 1000;
 				
@@ -60,19 +53,51 @@ package {
 				if (!_isJumping && FlxG.keys.pressed("W") && !velocity.y) {
 					_isJumping = true;
 					velocity.y = -_jumpVel;
+					
+					if (R.playerNumber == 1) FlxG.play(P1Jump, 0.1, false);
+					else FlxG.play(P2Jump, 0.1, false);
 				}
 				
 				if (touching == FlxObject.DOWN) _isJumping = false;
-				
-				if (FlxG.mouse.justPressed()) {
+
+				if (FlxG.mouse.pressed()) {
+					_isFiring = true;
+				}
+				else {
+					_isFiring = false;
+					_fireTimer = _firingPeriod;
+				}
+
+				if (_isFiring && _fireTimer >= _firingPeriod) {
+					_fireTimer = 0;
 					var type:int;
 					if (FlxG.keys.SHIFT) type = 1;
 					else type = 0;
-					R.bullets.fire(FlxG.mouse.x, FlxG.mouse.y, type);
+					sendBullet(FlxG.mouse.x, FlxG.mouse.y, type);
+					R.bullets.fire(FlxG.mouse.x, FlxG.mouse.y, type, 1);
+					
+					if (R.playerNumber == 1) FlxG.play(P1Shoot, 0.1, false);
+					else FlxG.play(P2Shoot, 0.1, false);
 				}
 				
+				if (_fireTimer < _firingPeriod) _fireTimer += FlxG.elapsed;
 				play("run");
-				sendData();
+			}
+			
+			// Score
+			if (y > R.map.height + 20) {
+				flicker();
+				x = _startx;
+				y = _starty;
+				
+				if ((R.playerNumber == 1 && inactive) || (R.playerNumber == 2 && !inactive)) {
+					R.player1Score++;
+					R.textPlayer1Score.text = "Player 1 score: " + R.player1Score;
+				}
+				else if ((R.playerNumber == 2 && inactive) || (R.playerNumber == 1 && !inactive)) {
+					R.player2Score++;
+					R.textPlayer2Score.text = "Player 2 score: " + R.player2Score;
+				}
 			}
 			
 			if (R.playerNumber == 1) {
@@ -86,13 +111,22 @@ package {
 			}
 		}
 		
-		public function sendData():void {
+		public function sendPosition():void {
 			var mess:Object = new Object();
-			mess.position = true;
 			mess.x = R.player1.x;
 			mess.y = R.player1.y;
 			R.socket1.write(JSON.encode(mess));
 			R.socket1.flush();
+		}
+		
+		public function sendBullet(x:int, y:int, type:int):void {
+			var mess:Object = new Object();
+			mess.bullet = true;
+			mess.x = x;
+			mess.y = y;
+			mess.type = type;
+			R.socket2.write(JSON.encode(mess));
+			R.socket2.flush();
 		}
 	}
 }

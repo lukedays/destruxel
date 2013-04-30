@@ -1,12 +1,11 @@
 package {
 	import org.flixel.*;
-	import flash.display.*;
-	import flash.utils.*;
 	import com.adobe.serialization.json.JSON;
 	
 	public class PlayState extends FlxState {
 		[Embed(source = "assets/tileset2.png")] protected var Tileset:Class;
 		[Embed(source = "assets/map.csv", mimeType = "application/octet-stream")] protected var Map:Class;
+		[Embed(source = "assets/song1.mp3")] private var Song1:Class;
 		
 		override public function create():void {
 			addEnvironment();
@@ -17,6 +16,8 @@ package {
 			FlxG.camera.setBounds(0, 0, R.map.width, R.map.height, true);
 			FlxG.camera.follow(R.player1, FlxCamera.STYLE_PLATFORMER);
 			FlxG.mouse.show();
+			
+			FlxG.play(Song1, 0.08, true);
 		}
 		
 		override public function update():void {

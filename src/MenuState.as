@@ -1,11 +1,10 @@
 package {
 	import org.flixel.*;
-	import flash.display.*;
-	import flash.utils.*;
 	
 	public class MenuState extends FlxState {
+		[Embed(source = "assets/song2.mp3")] private var Song2:Class;
 		protected var _host:String = "10.5.43.167";
-		protected var _port:int = 1148;
+		protected var _port:int = 1150;
 		
 		override public function create():void {
 			FlxG.bgColor = 0xffd8d7a6;
@@ -14,8 +13,10 @@ package {
 			addBasicUI();
 			addNetworkUI();
 			
-			R.socket1 = new CustomSocket(_host, _port);
-			R.socket2 = new CustomSocket(_host, _port + 1);
+			R.socket1 = new CustomSocket(_host, _port); // For login and player's positions
+			R.socket2 = new CustomSocket(_host, _port + 1); // For block creation/destruction
+			
+			FlxG.play(Song2, 0.08, true);
 		}
 		
 		public function addBasicUI():void {
@@ -23,7 +24,7 @@ package {
 			text.setFormat(null, 80, 0xAA0000, "center", 0xff000000);
 			add(text);
 			
-			text = new FlxText(0, 250, FlxG.width, "W, A, D -> move and jump!\nMouse -> aim and destroy!\nSHIFT -> hold to build!");
+			text = new FlxText(0, 250, FlxG.width, "Objective: drop the opponent!\nW, A, D -> move and jump\nMouse -> aim and hold to destroy\nSHIFT -> hold to build");
 			text.setFormat(null, 35, 0x000000, "center", 0xff000000);
 			add(text);
 		}
@@ -50,7 +51,6 @@ package {
 		
 		override public function update():void {
 			if (FlxG.keys.any()) FlxG.switchState(new PlayState());
-			
 			super.update();
 		}
 	}

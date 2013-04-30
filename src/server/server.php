@@ -4,7 +4,7 @@ error_reporting(~E_NOTICE);
 set_time_limit(0);
  
 $address = "10.5.43.167";
-$port = 1148;
+$port = 1150;
 $max_players = 2;
  
 $sock = socket_create(AF_INET, SOCK_STREAM, 0);
@@ -69,8 +69,8 @@ while (true) {
 				
 				
 				$input = json_decode($input);
-				if ($input->block) {
-					$message = array("block" => true, "x" => (string)$input->x, "y" => (string)$input->y, "tile" => (string)$input->tile);
+				if ($input->bullet) {
+					$message = array("bullet" => true, "x" => (string)$input->x, "y" => (string)$input->y, "type" => (string)$input->type);
 					socket_write($players[$j], json_encode($message));
 				}
 				else if ($input->x && $input->y) {

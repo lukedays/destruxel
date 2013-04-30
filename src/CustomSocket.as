@@ -39,7 +39,6 @@ package {
 			// Responses sometimes come in batch
 			var split:Array = response.split("}");
 			for (var i:int = 0; i < split.length - 1; ++i) {
-				
 				var obj:Object = JSON.decode(split[i] + "}");
 				if (obj.login) {
 					if (!R.playerNumber) R.playerNumber = obj.player;
@@ -54,10 +53,9 @@ package {
 						R.textPlayer2Number.color = 0x00AA00;
 					}
 				}
-				else if (obj.block) {
+				else if (obj.bullet) {
 					if (obj.x && obj.y) {
-						R.map.setTile(parseInt(obj.x), parseInt(obj.y), parseInt(obj.tile));
-						R.shadows.updateVertices();
+						R.bullets.fire(parseFloat(obj.x), parseFloat(obj.y), parseInt(obj.type), 2);
 					}
 				}
 				else if (obj.x && obj.y) {

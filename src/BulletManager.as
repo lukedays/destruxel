@@ -10,9 +10,9 @@ package {
 			}
 		}
 		
-		public function fire(x:Number, y:Number, type:int):void {
+		public function fire(x:Number, y:Number, type:int, origin:int):void {
 			if (getFirstAvailable()) {
-				Bullet(getFirstAvailable()).fire(x, y, type);
+				Bullet(getFirstAvailable()).fire(x, y, type, origin);
 			}
 		}
 	}
