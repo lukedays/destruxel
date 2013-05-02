@@ -4,6 +4,7 @@ package {
     import flash.net.*;
 	import flash.errors.*;
 	import com.adobe.serialization.json.JSON;
+	import org.flixel.*;
 
 	public class CustomSocket extends Socket {
 		public var response:String;
@@ -52,6 +53,10 @@ package {
 						R.textPlayer2Number.text = "Player 2 Online";
 						R.textPlayer2Number.color = 0x00AA00;
 					}
+				}
+				else if (obj.restart) {
+					FlxG.switchState(new PlayState());
+					FlxG.stopReplay();
 				}
 				else if (obj.bullet) {
 					if (obj.x && obj.y) {

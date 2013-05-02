@@ -3,29 +3,34 @@ package {
 	
 	public class MenuState extends FlxState {
 		[Embed(source = "assets/song2.mp3")] private var Song2:Class;
-		protected var _host:String = "128.238.56.208";
+		protected var _host:String = "10.5.43.167";
 		protected var _port:int = 1165;
 		
 		override public function create():void {
 			FlxG.bgColor = 0xffd8d7a6;
 			FlxG.shake(0.01, 0.2);
 			
+			add(new Background(0, 0, 0));
 			addBasicUI();
 			addNetworkUI();
 			
 			R.socket1 = new CustomSocket(_host, _port); // For login and player's positions
-			R.socket2 = new CustomSocket(_host, _port + 1); // For block creation/destruction
+			R.socket2 = new CustomSocket(_host, _port + 1); // For bullets
 			
 			FlxG.play(Song2, 0.08, true);
 		}
 		
 		public function addBasicUI():void {
-			var text:FlxText = new FlxText(0, 50, FlxG.width, "Destruxel");
-			text.setFormat(null, 80, 0xAA0000, "center", 0xff000000);
+			var text:FlxText = new FlxText(0, 45, FlxG.width, "Destruxel Online");
+			text.setFormat(null, 80, 0x565025, "center", 0xff000000);
 			add(text);
 			
 			text = new FlxText(0, 250, FlxG.width, "Objective -> drop the opponent!\nW, A, D -> move and jump\nMouse -> aim and hold to destroy\nSHIFT -> hold to build");
-			text.setFormat(null, 35, 0x000000, "center", 0xff000000);
+			text.setFormat(null, 30, 0x000000, "center", 0xff000000);
+			add(text);
+			
+			text = new FlxText(0, 500, FlxG.width, "Wait for the opponent at this screen");
+			text.setFormat(null, 35, 0xAA0000, "center", 0xff000000);
 			add(text);
 		}
 		
@@ -50,7 +55,10 @@ package {
 		}
 		
 		override public function update():void {
-			if (FlxG.keys.any()) FlxG.switchState(new PlayState());
+			if (FlxG.keys.any()) {
+				FlxG.switchState(new PlayState());
+				FlxG.stopReplay();
+			}
 			super.update();
 		}
 	}

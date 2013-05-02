@@ -38,6 +38,17 @@ package {
 				renderShadows(new FlxPoint(R.light.x, R.light.y), v);
 			}
 			
+			// Line of sight
+			var gfx:Graphics = FlxG.flashGfx;
+    		gfx.clear();
+			gfx.lineStyle(1, 0xAA0000, 1);			
+			var begin:FlxPoint = new FlxPoint(R.player1.x + R.player1.width / 2, R.player1.y + 5);
+			var mouse:FlxPoint = new FlxPoint(FlxG.mouse.x, FlxG.mouse.y);
+			var end:FlxPoint = parallel2(begin, mouse);
+			gfx.moveTo(begin.x, begin.y);
+			gfx.lineTo(end.x, end.y);
+			pixels.draw(FlxG.flashGfxSprite);
+			
 			super.draw();
 		}
 		
@@ -116,6 +127,10 @@ package {
 		
 		public function parallel(a:FlxPoint, b:FlxPoint):FlxPoint {
 			return new FlxPoint(a.x + 100 * (a.x - b.x), a.y + 100 * (a.y - b.y));
+		}
+		
+		public function parallel2(a:FlxPoint, b:FlxPoint):FlxPoint {
+			return new FlxPoint(a.x - 100 * (a.x - b.x), a.y - 100 * (a.y - b.y));
 		}
 	}
 }

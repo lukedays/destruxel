@@ -8,7 +8,7 @@ package {
 			super(x, y);
 			loadGraphic(Img, true, true, 200, 200);
 			blend = "screen";
-			scale = new FlxPoint(7, 7);
+			scale = new FlxPoint(12, 12);
 			addAnimation("light", [2, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1], 10);
 		}
 

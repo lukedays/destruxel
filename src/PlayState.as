@@ -3,7 +3,7 @@ package {
 	import com.adobe.serialization.json.JSON;
 	
 	public class PlayState extends FlxState {
-		[Embed(source = "assets/tileset2.png")] protected var Tileset:Class;
+		[Embed(source = "assets/tileset.png")] protected var Tileset:Class;
 		[Embed(source = "assets/map.csv", mimeType = "application/octet-stream")] protected var Map:Class;
 		[Embed(source = "assets/song1.mp3")] private var Song1:Class;
 		
@@ -21,6 +21,10 @@ package {
 		}
 		
 		override public function update():void {
+			if (FlxG.keys.ESCAPE) {
+				sendRestart();
+				FlxG.switchState(new PlayState());
+			}
 			FlxG.collide(R.player1, R.blocks);
 			FlxG.collide(R.player2, R.blocks);
 			super.update();
@@ -28,12 +32,12 @@ package {
 		
 		public function addBasicUI():void {
 			R.textPlayer1Score = new FlxText(0, 2, FlxG.width, "Player 1 score: " + R.player1Score);
-			R.textPlayer1Score.setFormat(null, 16, 0x0000AA, "left");
+			R.textPlayer1Score.setFormat(null, 22, 0xde921b, "left");
 			R.textPlayer1Score.scrollFactor.x = R.textPlayer1Score.scrollFactor.y = 0;
 			add(R.textPlayer1Score);
 			
-			R.textPlayer2Score = new FlxText(0, 20, FlxG.width, "Player 2 score: " + R.player2Score);
-			R.textPlayer2Score.setFormat(null, 16, 0xAA0000, "left");
+			R.textPlayer2Score = new FlxText(0, 35, FlxG.width, "Player 2 score: " + R.player2Score);
+			R.textPlayer2Score.setFormat(null, 22, 0x16ea11, "left");
 			R.textPlayer2Score.scrollFactor.x = R.textPlayer2Score.scrollFactor.y = 0;
 			add(R.textPlayer2Score);
 		}
@@ -76,7 +80,6 @@ package {
 			R.blocks.add(left);
 			R.blocks.add(right);
 			R.blocks.add(top);
-			//R.blocks.add(bottom);
 			R.blocks.add(R.map);
 			
 			add(R.shadows);
@@ -94,6 +97,13 @@ package {
 			R.player2 = new Player(FlxG.width / 2, FlxG.height / 3);
 			R.player2.inactive = true;
 			add(R.player2);
+		}
+		
+		public function sendRestart():void {
+			var mess:Object = new Object();
+			mess.restart = true;
+			R.socket1.write(JSON.encode(mess));
+			R.socket1.flush();
 		}
 	}
 }
