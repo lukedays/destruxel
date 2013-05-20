@@ -87,7 +87,7 @@ package {
 			}
 			
 			// Score
-			if (y > R.map.height + 20) {
+			if (y > R.map.height + 30) {
 				flicker();
 				x = _startx;
 				y = _starty;
